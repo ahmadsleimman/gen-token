@@ -4,7 +4,7 @@ jobs:
   test:
     docker:
       - image: circleci/python:3.8  # Python environment
-      - image: circleci/postgres:13.2-alpine  # PostgreSQL service
+      - image: circleci/postgres:13.2  # PostgreSQL service
 
     environment:
       POSTGRES_USER: postgres
