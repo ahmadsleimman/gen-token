@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .error {
+            color: red;
+            font-size: 0.9em;
+        }
+        .password-container {
+            display: flex;
+            align-items: center;
+        }
+        .toggle-password {
+            margin-left: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>User Registration Form</h1>
+    <form id="registration-form">
+        <label for="user_id">User ID:</label>
+        <input type="text" id="user_id" name="user_id" required>
+        <span id="user-id-error" class="error"></span><br><br>
+
+        <label for="password">Password:</label>
+        <div class="password-container">
+            <input type="password" id="password" name="password" required minlength="8" title="Password must be at least 8 characters long">
+<!--            <span class="toggle-password" id="toggle-password">👁️</span>-->
+        </div>
+        <span id="password-error" class="error"></span><br><br>
+
+        <button type="submit">Register</button>
+    </form>
+
+    <div id="app-key-container" style="display:none; margin-top: 20px;">
+        <strong>Your App Key:</strong> <span id="app-key"></span>
+    </div>
+
+    <script>
+        document.getElementById('registration-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            const userId = document.getElementById('user_id').value;
+            const password = document.getElementById('password').value;
+
+            // Clear previous error messages
+            document.getElementById('user-id-error').textContent = '';
+            document.getElementById('password-error').textContent = '';
+
+            fetch('/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ user_id: userId, password: password })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    // Display error messages based on the field that has an error
+                    if (data.field === 'user_id') {
+                        document.getElementById('user-id-error').textContent = data.error;
+                    } else if (data.field === 'password') {
+                        document.getElementById('password-error').textContent = data.error;
+                    } else {
+                        alert(data.error);
+                    }
+                } else {
+                    alert(data.message);
+                    document.getElementById('app-key').textContent = data.app_key; // Display the app key
+                    document.getElementById('app-key-container').style.display = 'block'; // Show the app key container
+                    document.getElementById('registration-form').reset(); // Reset the form
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        });
+
+        // Password visibility toggle
+        document.getElementById('toggle-password').addEventListener('click', function() {
+            const passwordInput = document.getElementById('password');
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+<!--            this.textContent = type === 'password' ? '👁️' : '🙈';-->
+        });
+
+        // Real-time validation
+        document.getElementById('user_id').addEventListener('input', function() {
+            const userId = this.value;
+            if (userId.length < 3) {
+                document.getElementById('user-id-error').textContent = 'User ID must be at least 3 characters long.';
+            } else {
+                document.getElementById('user-id-error').textContent = '';
+            }
+        });
+
+        document.getElementById('password').addEventListener('input', function() {
+            const password = this.value;
+            if (password.length < 8) {
+                document.getElementById('password-error').textContent = 'Password must be at least 8 characters long.';
+            } else {
+                document.getElementById('password-error').textContent = '';
+            }
+        });
+    </script>
+</body>
+</html>
