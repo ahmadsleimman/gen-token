@@ -29,8 +29,8 @@ jobs:
       - run:
           name: Deploy to Server
           command: |
-            scp -o StrictHostKeyChecking=no -r ./ad.py rot@209.182.239.192:/root/py
-            ssh -o StrictHostKeyChecking=no rot@209.182.239.192 "cd /root/py && python ad.py"
+            scp -o StrictHostKeyChecking=no -r ./ad.py root@209.182.239.192:/root/py
+            ssh -o StrictHostKeyChecking=no root@209.182.239.192 "cd /root/py && python ad.py"
 
 workflows:
   version: 2
