@@ -1,10 +1,9 @@
 version: 2.1
 
 jobs:
-  test:
+  run_flask_tests:  # More descriptive job name
     docker:
       - image: circleci/python:3.8  # Python environment
-
 
     steps:
       - checkout  # Check out the source code
@@ -16,11 +15,9 @@ jobs:
             python -m pip install --upgrade pip
             pip install -r requirements.txt
 
-      
-
-      # Optionally, increase the timeout limit for long jobs
+      # Run Flask app tests with extended timeout
       - run:
-          name: Run Flask app tests with extended timeout
+          name: Run Flask app tests
           command: python ad.py
           no_output_timeout: 20m  # Increase timeout limit to 20 minutes
 
@@ -28,4 +25,4 @@ workflows:
   version: 2
   test:
     jobs:
-      - test
+      - run_flask_tests
