@@ -4,28 +4,10 @@ jobs:
   test:
     docker:
       - image: circleci/python:3.8  # Python environment
-      - image: circleci/postgres:13.2  # PostgreSQL service
 
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_DB: tbken
-      POSTGRES_PASSWORD: Ahmad
-      DB_HOST: 127.0.0.1  # Ensures localhost is used
-      FLASK_DEBUG: false
-      TOKEN_EXPIRATION_MINUTES: 15
 
     steps:
       - checkout  # Check out the source code
-
-      # Wait for PostgreSQL service to be ready
-      - run:
-          name: Wait for PostgreSQL to be ready
-          command: |
-            for i in `seq 1 30`; do
-              nc -z 127.0.0.1 5432 && echo "PostgreSQL is up!" && break;
-              echo "Waiting for PostgreSQL... ($i/30)";
-              sleep 1;
-            done
 
       # Install Python dependencies
       - run:
@@ -39,7 +21,7 @@ jobs:
       # Optionally, increase the timeout limit for long jobs
       - run:
           name: Run Flask app tests with extended timeout
-          command: python esw.py
+          command: python ad.py
           no_output_timeout: 20m  # Increase timeout limit to 20 minutes
 
 workflows:
