@@ -19,18 +19,17 @@ jobs:
       - run:
           name: Run Flask app tests
           command: python ad.py
-          no_output_timeout: 20m  # Increase timeout limit to 20 minutes
 
-  deploy:  # Job to deploy the application
-    docker:
-      - image: circleci/python:3.8  # Python environment for deployment
+
+ deploy:
+    machine: true  # Use a machine executor to run SSH commands
     steps:
-      - checkout  # Check out the source code
+      - checkout  # Ensure you have the latest code
       - run:
-          name: Deploy to Server
+          name: Deploy to server
           command: |
-            scp -o StrictHostKeyChecking=no -r ./ad.py root@209.182.239.192:/root/py
-            ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@209.182.239.192 "cd /root/py && python ad.py"
+            ssh -o StrictHostKeyChecking=no root@209.182.239.192 "cd /root/py && git pull origin main"
+
 
 workflows:
   version: 2
