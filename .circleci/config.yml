@@ -1,7 +1,7 @@
 version: 2.1
 
 jobs:
-  run_flask_tests:  # More descriptive job name
+  run_flask_tests:  # Job to run Flask tests
     docker:
       - image: circleci/python:3.8  # Python environment
 
@@ -21,7 +21,7 @@ jobs:
           command: python ad.py
           no_output_timeout: 20m  # Increase timeout limit to 20 minutes
 
-deploy:
+  deploy:  # Job to deploy the application
     docker:
       - image: circleci/python:3.8  # Python environment for deployment
     steps:
@@ -30,17 +30,17 @@ deploy:
           name: Deploy to Server
           command: |
             scp -o StrictHostKeyChecking=no -r ./ad.py rot@209.182.239.192:/root/py
-            ssh root@209.182.239.192 "cd /root/py && your-deploy-command"
+            ssh -o StrictHostKeyChecking=no rot@209.182.239.192 "cd /root/py && your-deploy-command"
 
 workflows:
   version: 2
   build_and_deploy:
     jobs:
-      - run_flask_tests:  # Updated job name to match the defined job
+      - run_flask_tests:  # This job runs the tests
           filters:
             branches:
               only: main  # Adjust to your branch name
-      - deploy:
+      - deploy:  # This job deploys the application
           requires:
             - run_flask_tests  # Ensure deploy runs after tests
           filters:
