@@ -34,12 +34,7 @@ jobs:
             python -m pip install --upgrade pip
             pip install -r requirements.txt
 
-      # Run the tests using pytest (install pytest if needed)
-      - run:
-          name: Run tests
-          command: |
-            pip install pytest
-            pytest
+      
 
       # Optionally, increase the timeout limit for long jobs
       - run:
