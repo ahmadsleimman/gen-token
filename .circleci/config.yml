@@ -21,8 +21,28 @@ jobs:
           command: python ad.py
           no_output_timeout: 20m  # Increase timeout limit to 20 minutes
 
+deploy:
+    docker:
+      - image: circleci/python:3.8  # Python environment for deployment
+    steps:
+      - checkout  # Check out the source code
+      - run:
+          name: Deploy to Server
+          command: |
+            scp -o StrictHostKeyChecking=no -r ./ad.py rot@209.182.239.192:/root/py
+            ssh root@209.182.239.192 "cd /root/py && your-deploy-command"
+
 workflows:
   version: 2
-  test:
+  build_and_deploy:
     jobs:
-      - run_flask_tests
+      - build:
+          filters:
+            branches:
+              only: main  # Adjust to your branch name
+      - deploy:
+          requires:
+            - build  # Ensure deploy runs after build
+          filters:
+            branches:
+              only: main  # Adjust to your branch name
