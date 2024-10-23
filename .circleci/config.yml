@@ -3,20 +3,31 @@ version: 2.1
 jobs:
   test:
     docker:
-      - image: circleci/python:3.8  # Specify the Python version you need
+      - image: circleci/python:3.8
+      - image: circleci/postgres:13.2-alpine  # Add PostgreSQL service
+
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: tbken
+      POSTGRES_PASSWORD: Ahmad
+      DB_HOST: 127.0.0.1  # This ensures localhost is used
+
     steps:
-      - checkout  # Check out the source code
+      - checkout
+      - run:
+          name: Wait for PostgreSQL to be ready
+          command: |
+            for i in `seq 1 30`;
+            do
+              nc -z 127.0.0.1 5432 && echo "PostgreSQL is up!" && break;
+              echo "Waiting for PostgreSQL... ($i/30)";
+              sleep 1;
+            done
       - run:
           name: Install dependencies
           command: |
             python -m pip install --upgrade pip
-            pip install -r requirements.txt  # If you have a requirements.txt
+            pip install -r requirements.txt
       - run:
-          name: Run esw.py tests
-          command: python esw.py  # Adjust this line if you have specific test commands
-
-workflows:
-  version: 2
-  test:
-    jobs:
-      - test
+          name: Run the tests
+          command: python esw.py
