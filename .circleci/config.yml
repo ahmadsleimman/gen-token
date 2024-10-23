@@ -21,7 +21,7 @@ jobs:
           command: python ad.py
 
 
- deploy:
+deploy:
     machine: true  # Use a machine executor to run SSH commands
     steps:
       - checkout  # Ensure you have the latest code
