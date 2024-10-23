@@ -6,7 +6,11 @@ jobs:
       - image: circleci/python:3.8  # Specify the Python version you need
     steps:
       - checkout  # Check out the source code
-      
+      - run:
+          name: Install dependencies
+          command: |
+            python -m pip install --upgrade pip
+            pip install -r requirements.txt  # If you have a requirements.txt
       - run:
           name: Run esw.py tests
           command: python esw.py  # Adjust this line if you have specific test commands
