@@ -15,13 +15,12 @@ jobs:
             python -m pip install --upgrade pip
             pip install -r requirements.txt
 
-      # Run Flask app tests with extended timeout
+      # Run Flask app tests
       - run:
           name: Run Flask app tests
           command: python ad.py
 
-
-deploy:
+  deploy:  # Define the deploy job
     machine: true  # Use a machine executor to run SSH commands
     steps:
       - checkout  # Ensure you have the latest code
@@ -30,18 +29,17 @@ deploy:
           command: |
             ssh -o StrictHostKeyChecking=no root@209.182.239.192 "cd /root/py && git pull origin main"
 
-
 workflows:
   version: 2
   build_and_deploy:
     jobs:
-      - run_flask_tests:  # This job runs the testss
+      - run_flask_tests:  # This job runs the tests
           filters:
             branches:
-              only: main  # Adjust to your branch name
+              only: main  # Only run this job on the main branch
       - deploy:  # This job deploys the application
           requires:
             - run_flask_tests  # Ensure deploy runs after tests
           filters:
             branches:
-              only: main  # Adjust to your branch name
+              only: main  # Only run this job on the main branch
