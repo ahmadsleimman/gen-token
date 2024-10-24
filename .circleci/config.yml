@@ -20,9 +20,12 @@ jobs:
           name: Run Flask app tests
           command: python ad.py
 
-  deploy:  # Define the deploy job
-    machine: true  # Use a machine executor to run SSH commands
+deploy:
+    machine: true
     steps:
+      - add_ssh_keys: # Add SSH keys for the deployment
+          fingerprints:
+            - "SHA256:YdRiWID71+DxOdEibOxB0SQpZavhUSk1dAOo/scAZZQ"  # Your SSH key fingerprint
       - checkout  # Ensure you have the latest code
       - run:
           name: Deploy to server
