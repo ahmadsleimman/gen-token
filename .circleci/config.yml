@@ -1,21 +1,20 @@
 version: 2.1
 
 jobs:
-  run_flask_tests:  # Job to run Flask tests
+  run_flask_tests:
     docker:
-      - image: circleci/python:3.8  # Python environment
+      - image: circleci/python:3.8
 
     steps:
-      - checkout  # Check out the source code
+      - checkout
 
-      # Install Python dependencies
       - run:
           name: Install dependencies
           command: |
             python -m pip install --upgrade pip
             pip install -r requirements.txt
 
-      # Run Flask app tests
+
       - run:
           name: Run Flask app tests
           command: python ad.py
@@ -23,26 +22,26 @@ jobs:
   deploy:
     machine: true
     steps:
-      - add_ssh_keys: # Add SSH keys for the deployment
+      - add_ssh_keys:
           fingerprints:
-            - "SHA256:9iPZ0nUQeQlqwPkNPYyZZvvzkxk7BZLZgN8YZeUvKn8"  # Your SSH key fingerprint
-      - checkout  # Ensure you have the latest code
+            - "  "  # Your SSH key fingerprint
+      - checkout
       - run:
           name: Deploy to server
           command: |
-            ssh -o StrictHostKeyChecking=no root@209.182.239.192 "cd /root/py/gen-token && git pull origin main"
+            ssh -o StrictHostKeyChecking=no user_name@ur_ip_address "cd /path/to/repo && git pull origin main"
 
 workflows:
   version: 2
   build_and_deploy:
     jobs:
-      - run_flask_tests:  # This job runs the tests
+      - run_flask_tests:
           filters:
             branches:
-              only: main  # Only run this job on the main branch
-      - deploy:  # This job deploys the application
+              only: main
+      - deploy:
           requires:
-            - run_flask_tests  # Ensure deploy runs after tests
+            - run_flask_tests
           filters:
             branches:
-              only: main  # Only run this job on the main branch
+              only: main
