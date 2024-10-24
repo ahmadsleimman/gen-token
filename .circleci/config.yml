@@ -21,16 +21,16 @@ jobs:
           command: python ad.py
 
 deploy:
-    machine: true
-    steps:
-      - add_ssh_keys: # Add SSH keys for the deployment
-          fingerprints:
-            - "SHA256:YdRiWID71+DxOdEibOxB0SQpZavhUSk1dAOo/scAZZQ"  # Your SSH key fingerprint
-      - checkout  # Ensure you have the latest code
-      - run:
-          name: Deploy to server
-          command: |
-            ssh -o StrictHostKeyChecking=no root@209.182.239.192 "cd /root/py && git pull origin main"
+  machine: true
+  steps:
+    - add_ssh_keys: # Add SSH keys for the deployment
+        fingerprints:
+          - "SHA256:YdRiWID71+DxOdEibOxB0SQpZavhUSk1dAOo/scAZZQ"  # Your SSH key fingerprint
+    - checkout  # Ensure you have the latest code
+    - run:
+        name: Deploy to server
+        command: |
+          ssh -o StrictHostKeyChecking=no root@209.182.239.192 "cd /root/py && git pull origin main"
 
 workflows:
   version: 2
