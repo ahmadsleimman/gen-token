@@ -29,7 +29,7 @@ jobs:
       - run:
           name: Deploy to server
           command: |
-            ssh -o StrictHostKeyChecking=no root@209.182.239.192 "cd /py && git pull origin main"
+            ssh -o StrictHostKeyChecking=no root@209.182.239.192 "cd /py/gen-token && git pull origin main"
 
 workflows:
   version: 2
