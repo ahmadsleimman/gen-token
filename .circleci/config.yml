@@ -25,7 +25,7 @@ jobs:
     steps:
       - add_ssh_keys: # Add SSH keys for the deployment
           fingerprints:
-            - "SHA256:YdRiWID71+DxOdEibOxB0SQpZavhUSk1dAOo/scAZZQ"  # Your SSH key fingerprint
+            - "SHA256:9iPZ0nUQeQlqwPkNPYyZZvvzkxk7BZLZgN8YZeUvKn8"  # Your SSH key fingerprint
       - checkout  # Ensure you have the latest code
       - run:
           name: Deploy to server
